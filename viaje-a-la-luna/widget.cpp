@@ -1,12 +1,16 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include "astronauta.h"
+#include "panel.h"
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
+
+    p= nullptr;
+
     mostrarInicio();
 }
 
@@ -37,10 +41,10 @@ void Widget::mostrarInicio()
 
     //añadir musiquita
     introinicio = new QMediaPlayer(this);
-    QAudioOutput *sonidointro = new QAudioOutput(this);
-    introinicio->setAudioOutput(sonidointro);
-    introinicio->setSource(QUrl("qrc:/audios/inicio.mp3"));
-    sonidointro->setVolume(0.3);
+    QAudioOutput *sonidoinicio = new QAudioOutput(this);
+    introinicio->setAudioOutput(sonidoinicio);
+    introinicio->setSource(QUrl("qrc:/audios/inicioJu.mp3"));
+    sonidoinicio->setVolume(0.3);
     // Reproducir automáticamente
     introinicio->play();
 
@@ -114,6 +118,220 @@ void Widget::iniciarIntroduccion()
     // Reproducir automáticamente
     introfon->play();
 
+    btnNivel1 = new QPushButton("Iniciar Nivel1",this);
+
+    btnNivel1->setGeometry(700,500,180,50);
+    btnNivel1->raise();  // asegurarte que quede al frente
+    btnNivel1->show();
+
+    connect(btnNivel1, &QPushButton::clicked, this, &Widget::iniciarNivel1);
+}
+
+void Widget::iniciarNivel1()
+{
+
+
+
+
+    //eliminar boton de start
+
+    btnNivel1->hide();
+    intro1->stop();
+    introfon->stop();
+
+    sceneNivel1 = new QGraphicsScene(ui->graphicsView->rect(), this);
+    ui->graphicsView->setScene(sceneNivel1);
+
+    //Añadir fondo
+    QPixmap originalImage(":/imagenes/panel1.png");
+    bgimageN1 = new QGraphicsPixmapItem(originalImage);
+    bgimageN1->setScale(2);
+    bgimageN1->setPos(-100,40);
+    sceneNivel1->addItem(bgimageN1);
+
+    //añadir musiquita
+    SoniPanel = new QMediaPlayer(this);
+    audioPanel = new QAudioOutput(this);
+
+    QAudioOutput *sonidoPanel = new QAudioOutput(this);
+    SoniPanel->setAudioOutput(sonidoPanel);
+    SoniPanel->setSource(QUrl("qrc:/audios/Sonpanel.mp3"));
+    sonidoPanel->setVolume(0.09);
+    // Reproducir automáticamente
+    SoniPanel->play();
+
+    //boton1 gasolina
+
+    btnGas = new QPushButton("Gasolina", this);
+    btnGas->setGeometry(380,670,90,45);
+    btnGas->raise();  // asegurarte que quede al frente
+    btnGas->show();
+
+    connect(btnGas, &QPushButton::clicked, this, &Widget::iniciarGasolina);
+
+    //boton2 oxigeno
+    btnOxig = new QPushButton("Oxigeno",this);
+    btnOxig->setGeometry(485,670,90,45);
+    btnOxig->raise();
+    btnOxig->show();
+
+    connect(btnOxig, &QPushButton::clicked, this, &Widget::iniciarOxigeno);
+
+    //boton3 temperatura
+
+    btnTemp = new QPushButton("Temperatura", this);
+    btnTemp->setGeometry(588,670,90,45);
+    btnTemp->raise();
+    btnTemp->show();
+
+    connect(btnTemp, &QPushButton::clicked,this, &Widget::iniciarTemperatura);
+
+
+
+
+}
+void Widget::iniciarGasolina()
+{
+
+
+    vida1 = new QGraphicsPixmapItem(QPixmap(":/imagenes/vidas1.png"));
+    vida1->setPos(650, 0);
+    vida1->setScale(0.2);
+    vida1->setZValue(10);
+    sceneNivel1->addItem(vida1);
+
+    vida2 = new QGraphicsPixmapItem(QPixmap(":/imagenes/vidas2.png"));
+    vida2->setPos(650, 0);
+    vida2->setScale(0.2);
+    vida2->setZValue(10);
+    sceneNivel1->addItem(vida2);
+
+    vida3 = new QGraphicsPixmapItem(QPixmap(":/imagenes/vidas3.png"));
+    vida3->setPos(650, 0);
+    vida3->setScale(0.2);
+    vida3->setZValue(10);
+    sceneNivel1->addItem(vida3);
+
+
+
+    //Añadir fondo
+
+    QPixmap originalImage(":/imagenes/gasolina.png");
+    bgimageGas = new QGraphicsPixmapItem(originalImage);
+    bgimageGas->setScale(1);
+    bgimageGas->setPos(0,0);
+    bgimageGas->setZValue(1);
+    sceneNivel1->addItem(bgimageGas);
+
+    if (!p){
+        p = new panel(sceneNivel1);
+    }
+
+    p->iniciarGasolina();
+
+    vidas = 3;
+    actualizarVidas();
+
+
+}
+
+void Widget::iniciarOxigeno()
+{
+
+}
+
+void Widget::iniciarTemperatura()
+{
+
+}
+void Widget::keyPressEvent(QKeyEvent *event)
+{
+    if(event->key() == Qt::Key_A)
+    {
+        p->detenerFlecha();
+
+        if (p->zonacorrecta())
+        {
+
+            // MOSTRAR ACERTASTE
+            imgAcierto = new QGraphicsPixmapItem(QPixmap(":/imagenes/acertaste.png"));
+            imgAcierto->setScale(0.5);
+            imgAcierto->setZValue(20);
+            imgAcierto->setPos(200,220);
+            sceneNivel1->addItem(imgAcierto);
+
+            // sonido
+            QMediaPlayer *son = new QMediaPlayer(this);
+            QAudioOutput *out = new QAudioOutput(this);
+            son->setAudioOutput(out);
+            son->setSource(QUrl("qrc:/audios/acertaste.mp3"));
+            out->setVolume(0.8);
+            son->play();
+
+            QTimer::singleShot(1200, this, [this](){
+                sceneNivel1->removeItem(imgAcierto);
+                delete imgAcierto;
+
+
+
+
+
+            btnSigte = new QPushButton("Panel Principal", this);
+            btnSigte->setGeometry(688,500,140,95);
+            btnSigte->raise();
+            btnSigte->show();
+
+            connect(btnSigte, &QPushButton::clicked,this, &Widget::iniciarNivel1);
+
+            });
+        }
+        else
+        {
+            vidas--;
+            actualizarVidas();
+            // MOSTRAR FÁLLASTE
+            imgFallo = new QGraphicsPixmapItem(QPixmap(":/imagenes/fallaste.png"));
+            imgFallo->setScale(0.5);
+            imgFallo->setZValue(20);
+            imgFallo->setPos(200,220);
+            sceneNivel1->addItem(imgFallo);
+
+            // sonido
+            QMediaPlayer *son = new QMediaPlayer(this);
+            QAudioOutput *out = new QAudioOutput(this);
+            son->setAudioOutput(out);
+            son->setSource(QUrl("qrc:/audios/fail.mp3"));
+            out->setVolume(0.8);
+            son->play();
+
+            // QUITAR IMAGEN DESPUÉS DE UN TIEMPO
+            QTimer::singleShot(1200, this, [this](){
+                sceneNivel1->removeItem(imgFallo);
+                delete imgFallo;
+
+                if (vidas > 0)
+                {
+                    p->reanudarFlecha();  // SIGUE EL JUEGO
+                }
+                else
+                {
+                    imgGameOver = new QGraphicsPixmapItem(QPixmap(":/imagenes/gameOver.png"));
+                    imgGameOver->setScale(0.5);
+                    imgGameOver->setZValue(20);
+                    imgGameOver->setPos(150,220);
+                    sceneNivel1->addItem(imgGameOver);
+
+                    // sonido game over
+                    QMediaPlayer *sonOver = new QMediaPlayer(this);
+                    QAudioOutput *Sonfail = new QAudioOutput(this);
+                    sonOver->setAudioOutput(Sonfail);
+                    sonOver->setSource(QUrl("qrc:/audios/gameOver.mp3"));
+                    Sonfail->setVolume(0.8);
+                    sonOver->play();
+                }
+            });
+        }
+    }
 }
 
 void Widget::bgMove()
@@ -132,6 +350,14 @@ void Widget::bgMove()
     if (bgImage2->x() + bgImage2->pixmap().width() < 0) {
         bgImage2->setX(bgImage1->x() + bgImage1->pixmap().width());
     }
+}
+
+void Widget::actualizarVidas()
+{
+    vida1->setVisible(vidas == 1);
+    vida2->setVisible(vidas == 2);
+    vida3->setVisible(vidas == 3);
+
 }
 
 
