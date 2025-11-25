@@ -11,6 +11,8 @@
 #include <QAudioOutput>
 #include <QTimer>
 #include <QPushButton>
+#include "panel.h"
+#include<QKeyEvent>
 
 
 
@@ -31,23 +33,39 @@ public:    //funciones
 
     void mostrarInicio();
     void iniciarIntroduccion();
+    void iniciarNivel1();
+    void iniciarGasolina();
+    void iniciarOxigeno();
+    void iniciarTemperatura();
+
+
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
 
 public slots: //sii conectar timer
     void bgMove();
 
 private:
     Ui::Widget *ui;
-    QGraphicsScene *scene1;
-    QGraphicsPixmapItem *bgImage1, *bgImage2;
+    QGraphicsScene *scene1, *sceneNivel1, *sceneInicio;
+    QGraphicsPixmapItem *bgImage1, *bgImage2, *bgimageN1, *bgimageGas, *imgFallo, *imgGameOver, *imgAcierto;
     astronauta *astro;
     QGraphicsTextItem *texto;
-    QMediaPlayer *intro1, *introfon, *introinicio, *sonclick;
+    QMediaPlayer *intro1, *introfon, *introinicio, *SoniPanel;
     QTimer *bgTimer;
+    QPushButton *btnStart, *btnNivel1, *btnGas, *btnOxig, *btnTemp, *btnSigte;
+    QAudioOutput *audioPanel;
+    panel *p= nullptr;
 
-    QGraphicsScene *sceneInicio;
-    QPushButton *btnStart;
 
+   detenerFlecha();
+   zonacorrecta();
 
-
+   int vidas = 3;
+   void actualizarVidas();
+   QGraphicsPixmapItem *vida1;
+   QGraphicsPixmapItem *vida2;
+   QGraphicsPixmapItem *vida3;
 };
 #endif // WIDGET_H
