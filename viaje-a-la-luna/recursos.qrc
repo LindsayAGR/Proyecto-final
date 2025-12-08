@@ -18,6 +18,13 @@
         <file>nave.png</file>
         <file>humoCohete.png</file>
         <file>espacio.png</file>
+        <file>Asteroide1.png</file>
+        <file>Asteroide2.png</file>
+        <file>Asteroide3.png</file>
+        <file>Asteroide4.png</file>
+        <file>Asteroide5.png</file>
+        <file>superado.png</file>
+        <file>explosion.png</file>
     </qresource>
     <qresource prefix="/audios">
         <file>intro.mp3</file>
