@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/imagenes">
+        <file>fondo1.png</file>
+        <file>astrona.png</file>
+        <file>inicio.png</file>
+        <file>panel1.png</file>
+        <file>gasolina.png</file>
+        <file>flechaAz.png</file>
+        <file>fallaste.png</file>
+        <file>acertaste.png</file>
+        <file>gameOver.png</file>
+        <file>vidas1.png</file>
+        <file>vidas2.png</file>
+        <file>vidas3.png</file>
+        <file>oxigeno.png</file>
+        <file>manecilla.png</file>
+        <file>temperatura.png</file>
+        <file>nave.png</file>
+        <file>humoCohete.png</file>
+        <file>espacio.png</file>
+        <file>Asteroide1.png</file>
+        <file>Asteroide2.png</file>
+        <file>Asteroide3.png</file>
+        <file>Asteroide4.png</file>
+        <file>Asteroide5.png</file>
+        <file>superado.png</file>
+        <file>explosion.png</file>
+    </qresource>
+    <qresource prefix="/audios">
+        <file>intro.mp3</file>
+        <file>introfondo.mp3</file>
+        <file>start.mp3</file>
+        <file>inicioJu.mp3</file>
+        <file>Sonpanel.mp3</file>
+        <file>gameOver.mp3</file>
+        <file>fail.mp3</file>
+        <file>acertaste.mp3</file>
+    </qresource>
+</RCC>
