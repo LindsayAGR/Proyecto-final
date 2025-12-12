@@ -25,7 +25,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
-    QGraphicsScene *scene;
+    QGraphicsScene *sceneEsp;
     Cohete *cohete;
     QPushButton *btnN3;
     QGraphicsProxyWidget *btnProxy;

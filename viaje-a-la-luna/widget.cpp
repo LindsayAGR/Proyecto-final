@@ -853,8 +853,8 @@ void Widget::iniciarNivel2()
     imageEsp1->setScale(2.1);
     imageEsp2 = new QGraphicsPixmapItem(originalImageEsp);
     imageEsp2->setScale(2.1);
-    imageEsp1->setPos(0, 0);
-    imageEsp2->setPos(originalImageEsp.width(), 0);
+    imageEsp1->setPos(0, -100);
+    imageEsp2->setPos(originalImageEsp.width(), -100);
     sceneEsp->addItem(imageEsp1);
     sceneEsp->addItem(imageEsp2);
 
@@ -865,6 +865,16 @@ void Widget::iniciarNivel2()
     EspTimer->start(16);
 
 
+    //añadir musiquita
+    SonEsp = new QMediaPlayer(this);
+    QAudioOutput *sonidoEsp = new QAudioOutput(this);
+    SonEsp->setAudioOutput(sonidoEsp);
+    SonEsp->setSource(QUrl("qrc:/audios/Sonespacios.mp3"));
+    sonidoEsp->setVolume(0.3);
+    // Reproducir automáticamente
+    SonEsp->play();
+
+
     //añadir cohete
 
     QPixmap pixmap(":/imagenes/nave.png");
@@ -873,13 +883,18 @@ void Widget::iniciarNivel2()
     cohete->setPos(-350,50);
     cohete->setZValue(100);
     cohete->setRotation(0);
+    sceneEsp->setSceneRect(0, 0, 1280, 720);
     sceneEsp->addItem(cohete);
+
+
+    cohete->setSceneBounds(sceneEsp->sceneRect());
+    cohete->setFocus();
+
 
     connect(cohete, &Cohete::detenerTodoSignal, this, &Widget::detenerEspacio);
     connect(cohete, &Cohete::colisionCohete, this, &Widget::detenerEspacio);
     connect(cohete, &Cohete::detenerAsteroidesSignal, this, &Widget::detenerAsteroides);
     connect(cohete, &Cohete::reiniciarSignal, this, &Widget::reiniciarTodo);
-
 
 
     cohete->setSceneBounds(sceneEsp->sceneRect());   // <- imprescindible

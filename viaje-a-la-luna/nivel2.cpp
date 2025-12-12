@@ -5,10 +5,10 @@ Nivel2::Nivel2(QWidget *parent)
     : QGraphicsView(parent)
 {
     // Escena
-    scene = new QGraphicsScene(this);
-    setScene(scene);
+    sceneEsp = new QGraphicsScene(this);
+    setScene(sceneEsp);
     setFixedSize(800,600);
-    scene->setSceneRect(0,0,800,600);
+    sceneEsp->setSceneRect(0,0,800,600);
 
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -16,9 +16,9 @@ Nivel2::Nivel2(QWidget *parent)
 
     // Crear cohete
     cohete = new Cohete(QPixmap(":/imagenes/nave.png"));
-    scene->addItem(cohete);
+    sceneEsp->addItem(cohete);
     cohete->setPos(300,400);
-    cohete->setSceneBounds(scene->sceneRect());
+    cohete->setSceneBounds(sceneEsp->sceneRect());
 
 
     connect(cohete, &Cohete::detenerTodoSignal, this, [this]() {
@@ -45,6 +45,13 @@ Nivel2::Nivel2(QWidget *parent)
 
 
 
+    cohete->setFocus();
+    this->setFocusPolicy(Qt::StrongFocus);
+
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setScene(sceneEsp);
+    setSceneRect(sceneEsp->sceneRect());
 }
 
 void Nivel2::mostrarSuperado()
@@ -64,11 +71,11 @@ void Nivel2::mostrarSuperado()
     imgSuperado->setScale(0.6);
     imgSuperado->setZValue(999);
     imgSuperado->setPos(150, 80);
-    scene->addItem(imgSuperado);
+    sceneEsp->addItem(imgSuperado);
 
     // Botón
     btnN3 = new QPushButton("Siguiente nivel");
-    QGraphicsProxyWidget *proxy = scene->addWidget(btnN3);
+    QGraphicsProxyWidget *proxy = sceneEsp->addWidget(btnN3);
     proxy->setPos(300,400);
     proxy->setZValue(999);
 

@@ -4,6 +4,8 @@
 #include <QGraphicsPixmapItem>
 #include <QTimer>
 #include <QGraphicsScene>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
 class Cohete : public QObject, public QGraphicsPixmapItem
 {
@@ -52,8 +54,10 @@ signals:
     void detenerAsteroidesSignal();
     void reiniciarSignal();
 
-protected:
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
     QPixmap pixmap;

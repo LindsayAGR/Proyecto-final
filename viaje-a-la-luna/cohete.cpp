@@ -2,6 +2,8 @@
 #include <QtMath>
 #include <QTimer>
 #include "asteroide.h"
+#include <QKeyEvent>
+
 
 Cohete::Cohete(const QPixmap &pix, QGraphicsItem *parent)
     : QGraphicsPixmapItem(parent), pixmap(pix)
@@ -36,6 +38,9 @@ Cohete::Cohete(const QPixmap &pix, QGraphicsItem *parent)
     connect(collTimer, &QTimer::timeout, this, &Cohete::checkcoll);
     collTimer->start(50);
 
+
+    setFlag(QGraphicsItem::ItemIsFocusable);
+    setFocus();
 
 }
 
@@ -77,16 +82,15 @@ void Cohete::moveDown()
 
 void Cohete::moverOscilacion()
 {
-    angulo += velo;
-    float dx = qSin(angulo) * amp;
-    setX(posInicialX + dx);
+    angulo += velo;   // angulo: fase del movimiento, velo: velocidad de oscilación
+    float dx = qSin(angulo) * amp; //amp: amplitud del movimiento
+    setX(posInicialX + dx); //actualiza dx para que el cohete se mueva de lado a lado.
 }
 
 void Cohete::lanzarC()
 {
     detenerOscilacion();
-    launchTimer->start(16);
-
+    launchTimer->start(16); //1s = 1000ms / 60s ~ 16.6ms (actualiza mov cada 16ms)
     if (!sceneNivel1Lanza) return;
 
     // Crear humo (tu código)
@@ -160,8 +164,9 @@ void Cohete::actualizarMovimiento()
     int newY = y() + dy;
 
     // Evita que se salga de la pantalla
-    if (checkBounds(newX, newY))
-        setPos(newX, newY);
+    // if (checkBounds(newX, newY))
+    //     setPos(newX, newY);
+    setPos(newX, newY);
 }
 
 void Cohete::iniciarOscilacion() { oscTimer->start(16); }
@@ -190,11 +195,20 @@ void Cohete::checkcoll()
                 this->hide();
 
                //crear explosion
+                QMediaPlayer *son = new QMediaPlayer();
+                QAudioOutput *out = new QAudioOutput();
+                son->setAudioOutput(out);
+                son->setSource(QUrl("qrc:/audios/explosion.mp3"));
+                out->setVolume(99);
+                son->play();
+
                 QPixmap pxExplo(":/imagenes/explosion.png");
                 explo = new QGraphicsPixmapItem(pxExplo);
                 explo->setScale(0.5);
                 explo->setZValue(200);     // para que quede encima
                 //poss exacta
+                // sonido
+
 
                 QPointF centroCohete = this->mapToScene(this->boundingRect().center());
                 QRectF brExplo = explo->boundingRect();
@@ -251,5 +265,39 @@ void Cohete::reiniciarJuego()
     QTimer::singleShot(20000, [this]() {
         emit reiniciarSignal();
     });
+}
+void Cohete::keyPressEvent(QKeyEvent *event)
+{
+    // Activar banderas según la tecla pulsada
+    if (event->key() == Qt::Key_Left) {
+        setBanLeft(true);
+    } else if (event->key() == Qt::Key_Right) {
+        setBanRigth(true);
+    } else if (event->key() == Qt::Key_Up) {
+        setBanUp(true);
+    } else if (event->key() == Qt::Key_Down) {
+        setBanDown(true);
+    } else if (event->key() == Qt::Key_W) {
+        lanzarC();
+    }
+
+    // opcional: llamar al padre si quieres comportamiento por defecto
+    QGraphicsPixmapItem::keyPressEvent(event);
+}
+
+void Cohete::keyReleaseEvent(QKeyEvent *event)
+{
+    // Desactivar banderas cuando se suelta la tecla
+    if (event->key() == Qt::Key_Left) {
+        setBanLeft(false);
+    } else if (event->key() == Qt::Key_Right) {
+        setBanRigth(false);
+    } else if (event->key() == Qt::Key_Up) {
+        setBanUp(false);
+    } else if (event->key() == Qt::Key_Down) {
+        setBanDown(false);
+    }
+
+    QGraphicsPixmapItem::keyReleaseEvent(event);
 }
 

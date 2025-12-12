@@ -70,7 +70,7 @@ private:
         *imageEsp1, *imageEsp2;
     astronauta *astro;
     QGraphicsTextItem *texto;
-    QMediaPlayer *intro1, *introfon, *introinicio, *SoniPanel;
+    QMediaPlayer *intro1, *introfon, *introinicio, *SoniPanel, *SonEsp;
     QTimer *bgTimer,*EspTimer;
     QPushButton *btnStart, *btnNivel1, *btnGas, *btnOxig, *btnTemp, *btnSigte,*btnlanza, *btnNivel2;
     QAudioOutput *audioPanel;
